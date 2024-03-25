@@ -56,7 +56,7 @@ const Slider: FC<SliderProps> = ({ imagesData }) => {
   useEffect(() => {
     const interval = setTimeout(() => {
       toScroll()
-    }, 400000)
+    }, 4000)
     return () => clearTimeout(interval)
   }, [mainImage, toScroll])
 
@@ -99,23 +99,19 @@ const Slider: FC<SliderProps> = ({ imagesData }) => {
         </ButtonStyled>
       </SliderStyles>
       <UlStyled>
-        {imagesData.map((item, index, arr) => (
-          <LiStyled
-            key={item.id}
-            $active={
-              index ===
-              (mainImage >= arr.length ? mainImage % arr.length : mainImage)
-            }
-          >
-            <button
-              onClick={() => {
-                const position =
-                  mainImage >= arr.length ? mainImage % arr.length : mainImage
-                toScroll(index - position)
-              }}
-            />
-          </LiStyled>
-        ))}
+        {imagesData.map((item, index, arr) => {
+          const imagePosition =
+            mainImage >= arr.length ? mainImage % arr.length : mainImage
+          return (
+            <LiStyled key={item.id} $active={index === imagePosition}>
+              <button
+                onClick={() => {
+                  toScroll(index - imagePosition)
+                }}
+              />
+            </LiStyled>
+          )
+        })}
       </UlStyled>
     </>
   )
