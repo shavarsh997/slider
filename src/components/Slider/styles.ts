@@ -1,16 +1,26 @@
 import styled from 'styled-components'
+import { devices } from '../../assets/constant'
 
 export const SliderStyles = styled.div`
   overflow: hidden;
   display: flex;
   align-items: center;
   width: 100%;
-  height: calc((100vw - 120px) * 0.28);
+  height: calc((1920px) * 0.28);
   position: relative;
   border-radius: 12px;
   background-color: #ffff;
+  max-width: 1920px;
+  @media ${devices['3xl']} {
+    height: calc((100vw - 120px) * 0.28);
+  }
+  @media ${devices['2xl']} {
+    height: calc((100vw - 120px) * 0.45);
+  }
+  @media ${devices['md']} {
+    height: calc((100vw - 40px) * 0.57);
+  }
 `
-
 export const SliderMainImageStyled = styled.div<{ $imgIndex: number }>`
   height: 100%;
   cursor: pointer;
@@ -21,88 +31,37 @@ export const SliderMainImageStyled = styled.div<{ $imgIndex: number }>`
   border-radius: 12px;
   ${({ $imgIndex }) =>
     $imgIndex <= 11 && $imgIndex >= -11
-      ? 'transition: all 0.3s ease;'
+      ? 'transition: all 0.5s ease;'
       : 'display:none;'}
   ${({ $imgIndex }) =>
     $imgIndex === 0
       ? `left: 2.5%; width: 50%;`
-      : $imgIndex === -16
-      ? `left: -232.5%; width: 14.5%;`
-      : $imgIndex === -15
-      ? `left: -217.5%; width: 14.5%;`
-      : $imgIndex === -14
-      ? `left: -202.5%; width: 14.5%;`
-      : $imgIndex === -13
-      ? `left: -192.5%; width: 14.5%;`
-      : $imgIndex === -12
-      ? `left: -177.5%; width: 14.5%;`
-      : $imgIndex === -11
-      ? `left: -162.5%; width: 14.5%;`
-      : $imgIndex === -10
-      ? `left: -147.5%; width: 14.5%;`
-      : $imgIndex === -9
-      ? `left: -132.5%; width: 14.5%;`
-      : $imgIndex === -8
-      ? `left: -117.5%; width: 14.5%;`
-      : $imgIndex === -7
-      ? `left: -102.5%; width: 14.5%;`
-      : $imgIndex === -6
-      ? `left: -87.5%; width: 14.5%;`
-      : $imgIndex === -5
-      ? `left: -72.5%; width: 14.5%;`
-      : $imgIndex === -4
-      ? `left: -57.5%; width: 14.5%;`
-      : $imgIndex === -3
-      ? `left: -42.5%; width: 14.5%;`
-      : $imgIndex === -2
-      ? `left: -27.5%; width: 14.5%;`
-      : $imgIndex === -1
-      ? `left: -12.5%; width: 14.5%;`
-      : $imgIndex === 1
-      ? `left: 53%; width: 14.5%;`
-      : $imgIndex === 2
-      ? `left: 68%; width: 14.5%;`
-      : $imgIndex === 3
-      ? `left: 83%; width: 14.5%;`
-      : $imgIndex === 4
-      ? `left: 98%; width: 14.5%;`
-      : $imgIndex === 5
-      ? `left: 113%; width: 14.5%;`
-      : $imgIndex === 6
-      ? `left: 128%; width: 14.5%;`
-      : $imgIndex === 7
-      ? `left: 143%; width: 14.5%;`
-      : $imgIndex === 8
-      ? `left: 168%; width: 14.5%;`
-      : $imgIndex === 9
-      ? `left: 183%; width: 14.5%;`
-      : $imgIndex === 10
-      ? `left: 198%; width: 14.5%;`
-      : $imgIndex === 10
-      ? `left: 198%; width: 14.5%;`
-      : $imgIndex === 11
-      ? `left: 213%; width: 14.5%;`
-      : $imgIndex === 12
-      ? `left: 228%; width: 14.5%;`
-      : $imgIndex === 13
-      ? `left: 243%; width: 14.5%;`
-      : $imgIndex === 14
-      ? `left: 282%; width: 14.5%;`
-      : $imgIndex === 15
-      ? `left: 297%; width: 14.5%;`
-      : $imgIndex === 16
-      ? `left: 312%; width: 14.5%;`
+      : $imgIndex > -16 && $imgIndex < 0
+      ? `left: ${2.5 + $imgIndex * 15}%; width: 14.5%;`
+      : $imgIndex < 16 && $imgIndex > 0
+      ? `left: ${38 + $imgIndex * 15}%; width: 14.5%;`
       : ``};
-`
-export const ContentBox2Styled = styled.div`
-  height: 100%;
-  overflow: hidden;
-  width: 100%;
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @media ${devices['2xl']} {
+    max-width: 1400px;
+    ${({ $imgIndex }) =>
+      $imgIndex === 0
+        ? `left: 2.5%; width: 80%;`
+        : $imgIndex > -16 && $imgIndex < 0
+        ? `left: ${2.5 + $imgIndex * 15}%; width: 14.5%;`
+        : $imgIndex < 16 && $imgIndex > 0
+        ? `left: ${68 + $imgIndex * 15}%; width: 14.5%;`
+        : ``};
+  }
+  @media ${devices['md']} {
+    ${({ $imgIndex }) =>
+      $imgIndex === 0
+        ? `left: 0%; width: 100%;`
+        : $imgIndex > -16 && $imgIndex < 0
+        ? `left: ${$imgIndex * 100}%; width: 100%;`
+        : $imgIndex < 16 && $imgIndex > 0
+        ? `left: ${$imgIndex * 100}%; width: 100%;`
+        : ``};
+  }
 `
 export const SliderImageStyled = styled.div`
   max-width: 100%;
@@ -127,10 +86,56 @@ export const ImageStyled = styled.img`
   width: auto;
   height: 100%;
 `
+export const TextBoxStyled = styled.div`
+  position: relative;
+  z-index: 2;
+  max-width: 100%;
+  width: 80%;
+  &::after {
+    content: '';
+    background: #2f3e4f;
+    opacity: 0.4;
+    position: absolute;
+    filter: blur(40px);
+    width: 100%;
+    height: 180%;
+    z-index: -1;
+    left: -10%;
+    top: -40%;
+  }
+`
+export const TitleStyled = styled.p<{ $active?: boolean }>`
+  margin: 10px 0;
+  font-size: ${({ $active }) => ($active ? '34px' : '20px')};
+  transition: all 0.4s ease;
+  width: ${({ $active }) => (!$active ? '100%' : '40%')};
+  color: #ffff;
+  @media ${devices['lg']} {
+    font-size: ${({ $active }) => ($active ? '28px' : '18px')};
+  }
+  @media ${devices['md']} {
+    font-size: 28px;
+    width: 40%;
+  }
+`
+export const DescriptionStyled = styled.p<{ $active?: boolean }>`
+  transition: all 0.4s ease;
+  margin: 14px 0;
+  font-size: ${({ $active }) => ($active ? '20px' : '1px')};
+  opacity: ${({ $active }) => ($active ? '1' : '0')};
+  width: 50%;
+  color: #ffff;
+  @media ${devices['lg']} {
+    font-size: ${({ $active }) => ($active ? '16px' : '1px')};
+  }
+  @media ${devices['md']} {
+    font-size: 16px;
+    opacity: 1;
+  }
+`
 export const ButtonStyled = styled.button<{ $isLefSide?: boolean }>`
   z-index: 2;
   position: absolute;
-  /* visibility: hidden; */
   width: 30px;
   height: 30px;
   border: 1px solid #0000;
@@ -141,6 +146,13 @@ export const ButtonStyled = styled.button<{ $isLefSide?: boolean }>`
   align-items: center;
   cursor: pointer;
   ${({ $isLefSide }) => ($isLefSide ? 'left: 3%;' : 'right: 3%;')}
+`
+export const SubmitButton = styled.button`
+  z-index: 2;
+  background-color: #ffff;
+  width: 50px;
+  border-radius: 8px;
+  font-size: 16px;
 `
 export const UlStyled = styled.ul`
   display: flex;

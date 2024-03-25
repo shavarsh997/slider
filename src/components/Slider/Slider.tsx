@@ -1,5 +1,6 @@
 import { FC, useCallback, useEffect, useState } from 'react'
 import { FaArrowRight, FaArrowLeft } from 'react-icons/fa'
+import { useViewport } from '../../hook/useViewport'
 import {
   ContentBoxStyled,
   ImageStyled,
@@ -9,13 +10,24 @@ import {
   ButtonStyled,
   UlStyled,
   LiStyled,
+  TextBoxStyled,
+  TitleStyled,
+  DescriptionStyled,
+  SubmitButton,
 } from './styles'
+
 type SliderProps = {
-  imagesData: { id: number; url: string }[]
+  imagesData: {
+    id: number
+    title: string
+    description: string
+    url: string
+  }[]
 }
 
 const Slider: FC<SliderProps> = ({ imagesData }) => {
   const [mainImage, setMainImage] = useState(imagesData.length)
+  const { isMobile, isTablet } = useViewport()
   const data = [...imagesData, ...imagesData, ...imagesData]
 
   const imgIndexCalc = (
@@ -32,6 +44,7 @@ const Slider: FC<SliderProps> = ({ imagesData }) => {
       ? queue - imgQuantity
       : queue
   }
+
   const toScroll = useCallback(
     (amount: number = 1) => {
       if (!amount) return
@@ -43,32 +56,45 @@ const Slider: FC<SliderProps> = ({ imagesData }) => {
   useEffect(() => {
     const interval = setTimeout(() => {
       toScroll()
-    }, 4000)
+    }, 400000)
     return () => clearTimeout(interval)
   }, [mainImage, toScroll])
 
   return (
     <>
       <SliderStyles>
-        <ButtonStyled $isLefSide onClick={() => toScroll(-3)}>
+        <ButtonStyled
+          $isLefSide
+          onClick={() => toScroll(isMobile || isTablet ? -1 : -3)}
+        >
           <FaArrowLeft />
         </ButtonStyled>
-        {data.map(({ id, url }, index, arr) => (
-          <SliderMainImageStyled
-            onClick={() => {
-              setMainImage(index)
-            }}
-            key={`${id}${index}`}
-            $imgIndex={imgIndexCalc(index, mainImage, arr.length)}
-          >
-            <SliderImageStyled>
-              <ContentBoxStyled>
-                <ImageStyled src={url} alt="img"></ImageStyled>
-              </ContentBoxStyled>
-            </SliderImageStyled>
-          </SliderMainImageStyled>
-        ))}
-        <ButtonStyled onClick={() => toScroll(3)}>
+        {data.map(({ title, description, id, url }, index, arr) => {
+          const imgIndex = imgIndexCalc(index, mainImage, arr.length)
+          return (
+            <SliderMainImageStyled
+              onClick={() => {
+                setMainImage(index)
+              }}
+              key={`${id}${index}`}
+              $imgIndex={imgIndex}
+            >
+              <SliderImageStyled>
+                <ContentBoxStyled>
+                  <ImageStyled src={url} alt="img"></ImageStyled>
+                  <TextBoxStyled>
+                    <TitleStyled $active={imgIndex === 0}>{title}</TitleStyled>
+                    <DescriptionStyled $active={imgIndex === 0}>
+                      {description}
+                    </DescriptionStyled>
+                    <SubmitButton>get</SubmitButton>
+                  </TextBoxStyled>
+                </ContentBoxStyled>
+              </SliderImageStyled>
+            </SliderMainImageStyled>
+          )
+        })}
+        <ButtonStyled onClick={() => toScroll(isMobile || isTablet ? 1 : 3)}>
           <FaArrowRight />
         </ButtonStyled>
       </SliderStyles>
@@ -85,7 +111,6 @@ const Slider: FC<SliderProps> = ({ imagesData }) => {
               onClick={() => {
                 const position =
                   mainImage >= arr.length ? mainImage % arr.length : mainImage
-                console.log(position)
                 toScroll(index - position)
               }}
             />
